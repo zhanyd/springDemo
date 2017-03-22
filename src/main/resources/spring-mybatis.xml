@@ -1,14 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>  
-<beans xmlns="http://www.springframework.org/schema/beans"  
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"  
-    xmlns:context="http://www.springframework.org/schema/context"  
-    xmlns:mvc="http://www.springframework.org/schema/mvc"  
-    xsi:schemaLocation="http://www.springframework.org/schema/beans    
-                        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd    
-                        http://www.springframework.org/schema/context    
-                        http://www.springframework.org/schema/context/spring-context-3.1.xsd    
-                        http://www.springframework.org/schema/mvc    
-                        http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">  
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                        http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/context
+                        http://www.springframework.org/schema/context/spring-context.xsd 
+                        http://www.springframework.org/schema/tx  
+						http://www.springframework.org/schema/tx/spring-tx.xsd
+                        http://www.springframework.org/schema/mvc
+                        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
     <!-- 自动扫描 -->  
     <context:component-scan base-package="com.zhan" />  
     <!-- 引入配置文件 -->  
@@ -40,17 +44,22 @@
         <property name="dataSource" ref="dataSource" />  
         <!-- 自动扫描mapping.xml文件 -->  
         <property name="mapperLocations" value="classpath:com/zhan/biz/*/mapping/*.xml"></property> 
-       <!--  <property name="plugins">
+       <property name="plugins">
 		   <array>
-                <bean class="com.github.pagehelper.PageHelper">
+                <bean class="com.github.pagehelper.PageInterceptor">
                     <property name="properties">
                         <value>
-                            dialect=mysql
+                            helperDialect=sqlserver
+                            offsetAsPageNum=true
+                            rowBoundsWithCount=true
+                            pageSizeZero=true
+                            reasonable=true
+                            params=pageNum=pageNum;pageSize=pageSize;count=countSql;reasonable=reasonable;pageSizeZero=pageSizeZero
                         </value>
                     </property>
                 </bean>
             </array>
-		</property>  -->
+		</property>
     </bean>  
   
     <!-- DAO接口所在包名，Spring会自动查找其下的类 -->  
@@ -59,10 +68,11 @@
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>  
     </bean>  
   
-    <!-- (事务管理)transaction manager, use JtaTransactionManager for global tx -->  
-    <bean id="transactionManager"  
-        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">  
-        <property name="dataSource" ref="dataSource" />  
-    </bean>  
+  <tx:annotation-driven transaction-manager="transactionManager"/>
+    <!-- (事务管理)transaction manager -->
+    <bean id="transactionManager"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
   
 </beans> 
