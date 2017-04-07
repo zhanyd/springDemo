@@ -213,6 +213,14 @@
 		    <artifactId>commons-beanutils</artifactId>
 		    <version>1.9.3</version>
 		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/com.alibaba/simpleimage -->
+		<dependency>
+		    <groupId>com.alibaba</groupId>
+		    <artifactId>simpleimage</artifactId>
+		    <version>1.2.3</version>
+		</dependency>
+		
     
   </dependencies>
   <build>
